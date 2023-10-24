@@ -142,30 +142,12 @@ BOOL (*CUIBOMTreeIteratorIsAtEnd)(BOMTreeIteratorRef);
         [self.storage enumerateKeysAndObjectsWithoutIgnoringUsingBlock:^(struct renditionkeytoken *keyList, NSData *csiData) {
             if (weakSelf != nil && csiData != nil) {
                 CUIRenditionKey *key = [CUIRenditionKey renditionKeyWithKeyList:keyList];
-                TKRendition *rendition = [TKRendition renditionWithCSIData:csiData renditionKey:key];
-
-                if (!rendition.rendition) {
-                    NSString *name;
-                    CUIThemeRendition *cui = [TKVerifyTool fixedRenditionForCSIData:csiData
-                                                                                key:key
-                                                                            outName:&name];
-                    
-                    if (!cui) {
-                        //!TODO Abort
-                        NSLog(@"Failed to automatically fix rendition with name: %@", name);
-                        return;
-                    } else {
-                        rendition = [TKRendition renditionWithCUIRendition:cui csiData:csiData key:key];
-                        if (!rendition) return;
-                    }
-                }
+                TKRendition *rendition = [TKRendition renditionWithCSIData:csiData renditionKey:key version:weakSelf.storage.distilledInCoreUIVersion];
+                if (!rendition) return;
                 [weakSelf _addRendition: rendition];
-            } else {
-                // null csi data?
-                NSLog(@"couldnt get rendition");
             }
         }];
-        NSLog(@"pared %lu renditions", self.allRenditions.count);
+        NSLog(@"paired %lu renditions", self.allRenditions.count);
     }
 }
 

@@ -13,6 +13,7 @@
 @interface TKVerifyTool : NSObject
 
 + (CUIThemeRendition *)fixedRenditionForCSIData:(NSData *)csiData key:(CUIRenditionKey *)key outName:(NSString **)name;
++ (void)fixCSIData:(NSMutableData *)csiData key:(CUIRenditionKey *)key;
 + (void)correctSliceRects:(struct slice *)sliceRects layout:(CoreThemeLayout)layout count:(NSInteger)count forSize:(struct metric)imageSize;
 + (void)correctMetrics:(struct csi_metric_info *)info forSize:(struct metric)imageSize;
 

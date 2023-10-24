@@ -10,8 +10,6 @@
 		098AE129250A8D3900BC44A1 /* TKSVGRendition+Pasteboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 098AE128250A8D3900BC44A1 /* TKSVGRendition+Pasteboard.m */; };
 		099E91212509D70C003AE113 /* CoreSVG.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 099E91202509D70C003AE113 /* CoreSVG.framework */; };
 		09D0CCC12509C0D500A1DCE5 /* PDFKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09D0CCC02509C0D500A1DCE5 /* PDFKit.framework */; };
-		09FF665F250486C50018AB6B /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA8313DB1B3B2218003D0F4A /* Sparkle.framework */; };
-		09FF6660250486C50018AB6B /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FA8313DB1B3B2218003D0F4A /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FA092CED1B36822D0064DBC4 /* TERenditionsController+Dragging.m in Sources */ = {isa = PBXBuildFile; fileRef = FA092CEC1B36822D0064DBC4 /* TERenditionsController+Dragging.m */; };
 		FA1E9C691B3346A40097AA41 /* TEBitmapInspector.m in Sources */ = {isa = PBXBuildFile; fileRef = FA1E9C681B3346A40097AA41 /* TEBitmapInspector.m */; };
 		FA21F87D1B2E95710094202A /* TKRendition+Filtering.m in Sources */ = {isa = PBXBuildFile; fileRef = FA21F87C1B2E95710094202A /* TKRendition+Filtering.m */; };
@@ -89,7 +87,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				FA3A2381214AAF6D00E1A207 /* ThemeKit.framework in Copy Frameworks */,
-				09FF6660250486C50018AB6B /* Sparkle.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -235,7 +232,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA3A2380214AAF6600E1A207 /* ThemeKit.framework in Frameworks */,
-				09FF665F250486C50018AB6B /* Sparkle.framework in Frameworks */,
 				09D0CCC12509C0D500A1DCE5 /* PDFKit.framework in Frameworks */,
 				FA81475D1B2D95D100881F36 /* Quartz.framework in Frameworks */,
 				099E91212509D70C003AE113 /* CoreSVG.framework in Frameworks */,
@@ -504,7 +500,8 @@
 		FA606C011B2C1D2000F24960 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1140;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
 				ORGANIZATIONNAME = "Alex Zielenski";
 				TargetAttributes = {
 					FA606C081B2C1D2100F24960 = {
@@ -659,21 +656,24 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application: Alexander Zielenski (3GD8ABJ22W)";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 105;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 3GD8ABJ22W;
 				DYLIB_COMPATIBILITY_VERSION = "$(inherited)";
 				DYLIB_CURRENT_VERSION = 105;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -720,6 +720,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -729,12 +730,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 105;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 3GD8ABJ22W;
 				DYLIB_COMPATIBILITY_VERSION = "$(inherited)";
 				DYLIB_CURRENT_VERSION = 105;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -755,7 +758,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_ENTITLEMENTS = ThemeEngine/ThemeEngine.entitlements;
@@ -763,6 +766,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 115;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = G9T88PYL48;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -777,6 +781,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CFLAGS = (
 					"-Wno-profile-instr-unprofiled",
 					"-Wno-profile-instr-out-of-date",
@@ -792,7 +797,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_ENTITLEMENTS = ThemeEngine/ThemeEngine.entitlements;
@@ -800,6 +805,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 115;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = G9T88PYL48;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -814,6 +820,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CFLAGS = (
 					"-Wno-profile-instr-unprofiled",
 					"-Wno-profile-instr-out-of-date",

@@ -20,10 +20,12 @@
 #import "TKPDFRendition.h"
 #import "TKRawPixelRendition.h"
 #import "TKSVGRendition.h"
+#import "TKVerifyTool.h"
 
 #import <CoreUI/Renditions/CUIRenditions.h>
 #import <objc/objc.h>
 #import <CommonCrypto/CommonDigest.h>
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 NSString *md5(const char *cStr) {
     unsigned char result[CC_MD5_DIGEST_LENGTH];
@@ -52,24 +54,21 @@ static const void *TKRenditionChangeContext = &TKRenditionChangeContext;
 
 + (Class)renditionClassForCoreUIRendition:(CUIThemeRendition *)rendition {
     if ([rendition isKindOfClass:TKClass(_CUIExternalLinkRendition)] ||
-        [rendition isKindOfClass:TKClass(_CUIInternalLinkRendition)] ||
-        [rendition isKindOfClass:TKClass(_CUIThemePixelRendition)]) {
+        [rendition isKindOfClass:TKClass(_CUIInternalLinkRendition)]) {
         return [TKBitmapRendition class];
     } else if ([rendition isKindOfClass:TKClass(_CUIThemeMultisizeImageSetRendition)]) {
-        //return [TKIconRendition class];
         return NULL;
     } else if ([rendition isKindOfClass:TKClass(_CUIThemeEffectRendition)]) {
         return [TKEffectRendition class];
-        
     } else if ([rendition isKindOfClass:TKClass(_CUIThemeGradientRendition)]) {
         return [TKGradientRendition class];
-        
-    } else if ([rendition isKindOfClass:TKClass(_CUIPDFRendition)] || [rendition isKindOfClass:TKClass(_CUIThemePDFRendition)]) {
+    } else if ([rendition isKindOfClass:TKClass(_CUIPDFRendition)] || 
+               [rendition isKindOfClass:TKClass(_CUIThemePDFRendition)]) {
         return [TKPDFRendition class];
-        
     } else if ([rendition isKindOfClass:TKClass(_CUIRawDataRendition)]) {
         return [TKRawDataRendition class];
-    } else if ([rendition isKindOfClass:TKClass(_CUIRawPixelRendition)]) {
+    } else if ([rendition isKindOfClass:TKClass(_CUIRawPixelRendition)] ||
+               [rendition isKindOfClass:TKClass(_CUIThemePixelRendition)]) {
         return [TKRawPixelRendition class];
     } else if ([rendition isKindOfClass:TKClass(_CUIThemeSVGRendition)]) {
         return [TKSVGRendition class];
@@ -81,15 +80,42 @@ static const void *TKRenditionChangeContext = &TKRenditionChangeContext;
     return [TKBitmapRendition class];
 }
 
-+ (instancetype)renditionWithCSIData:(NSData *)csiData renditionKey:(CUIRenditionKey *)key {
++ (CUIThemeRendition *)_cuiThemeRenditionWithCSIData:(NSData *)csiData renditionKey:(CUIRenditionKey *)key version:(long long)version {
+    CUIThemeRendition *cuiRendition = nil;
+    if (NSProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 14) {
+        cuiRendition = [[TKClass(CUIThemeRendition) alloc] initWithCSIData:csiData forKey:key.keyList version:version];
+    } else {
+        cuiRendition = [[TKClass(CUIThemeRendition) alloc] initWithCSIData:csiData forKey:key.keyList];
+    }
+    
+    return cuiRendition;
+}
+
++ (CUIThemeRendition *)cuiThemeRenditionWithCSIData:(NSData *)csiData renditionKey:(CUIRenditionKey *)key version:(long long)version {
+    CUIThemeRendition *cuiRendition = [TKRendition _cuiThemeRenditionWithCSIData:csiData renditionKey:key version:version];
+    if (!cuiRendition) {
+        NSMutableData *fixedCSIData = [csiData mutableCopy];
+        [TKVerifyTool fixCSIData:fixedCSIData key:key];
+        cuiRendition = [TKRendition _cuiThemeRenditionWithCSIData:fixedCSIData renditionKey:key version:version];
+    }
+    return cuiRendition;
+}
+
++ (instancetype)renditionWithCSIData:(NSData *)csiData renditionKey:(CUIRenditionKey *)key version:(long long)version {
     if (!csiData || csiData.length == 0) {
         NSLog(@"Empty CSI Data!");
         return nil;
     }
     
-    CUIThemeRendition *rendition = [[TKClass(CUIThemeRendition) alloc] initWithCSIData:csiData forKey:key.keyList];
-    if (rendition == nil) return nil;
-    return [TKRendition renditionWithCUIRendition:rendition csiData:csiData key:key];
+    CUIThemeRendition *cuiRendition = [TKRendition cuiThemeRenditionWithCSIData:csiData renditionKey:key version:version];
+    
+    if (cuiRendition == nil) return nil;
+    
+    return [[[TKRendition renditionClassForCoreUIRendition:cuiRendition] alloc] _initWithCUIRendition:cuiRendition csiData:csiData key:key];
+}
+
++ (instancetype)renditionWithCSIData:(NSData *)csiData renditionKey:(CUIRenditionKey *)key {
+    return [TKRendition renditionWithCSIData:csiData renditionKey:key version:0];
 }
 
 + (instancetype)renditionWithCUIRendition:(CUIThemeRendition *)rendition csiData:(NSData *)csiData key:(CUIRenditionKey *)key {
@@ -98,13 +124,13 @@ static const void *TKRenditionChangeContext = &TKRenditionChangeContext;
 
 - (instancetype)_initWithCUIRendition:(CUIThemeRendition *)rendition csiData:(NSData *)csiData key:(CUIRenditionKey *)key {
     if ((self = [self init])) {        
-        self.renditionKey    = key;
-        self.rendition       = rendition;
-        self.name            = rendition.name;
-        self.utiType         = rendition.utiType;
-        self.exifOrientation = rendition.exifOrientation;
-        self.blendMode       = rendition.blendMode;
-        self.opacity         = rendition.opacity;
+        _renditionKey    = key;
+        _rendition       = rendition;
+        _name            = rendition.name;
+        _utiType         = rendition.utiType;
+        _exifOrientation = rendition.exifOrientation;
+        _blendMode       = rendition.blendMode;
+        _opacity         = rendition.opacity;
         
         struct csiheader header;
         [csiData getBytes:&header range:NSMakeRange(0, offsetof(struct csiheader, infolistLength) + sizeof(unsigned int))];
@@ -118,7 +144,7 @@ static const void *TKRenditionChangeContext = &TKRenditionChangeContext;
         self.scaleFactor                = (CGFloat)header.scaleFactor / 100.0;
         self.pixelFormat                = header.pixelFormat;
         self.renderingMode              = rendition.templateRenderingMode;
-                
+        
         //TOOD: Find out if this impacts our ability to save
         CFDataRef *data = TKIvarPointer(self.rendition, "_srcData");
         if (data != NULL) {

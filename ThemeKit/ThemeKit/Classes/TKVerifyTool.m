@@ -29,15 +29,10 @@ static NSInteger sliceSort(NSValue *first, NSValue *second, void *context) {
 
 @implementation TKVerifyTool
 
-+ (CUIThemeRendition *)fixedRenditionForCSIData:(NSData *)csiData key:(CUIRenditionKey *)key outName:(NSString **)name {
-    NSMutableData *data = csiData.mutableCopy;
-    
++ (void)fixCSIData:(NSMutableData *)data key:(CUIRenditionKey *)key {
     // Get the info list
     struct csiheader *header = (struct csiheader *)data.bytes;
 
-    if (name != NULL)
-        *name = @(header->metadata.name);
-    
     struct metric size = {
         .width  = header->width,
         .height = header->height
@@ -65,9 +60,22 @@ static NSInteger sliceSort(NSValue *first, NSValue *second, void *context) {
         
         ptr = (uint8_t *)ptr + info->length + sizeof(info);
     }
-    
-    return [[TKClass(CUIThemeRendition) alloc] initWithCSIData:data forKey:key.keyList];
 }
+
++ (CUIThemeRendition *)fixedRenditionForCSIData:(NSData *)csiData key:(CUIRenditionKey *)key outName:(NSString **)name {
+    NSMutableData *data = csiData.mutableCopy;
+    
+    struct csiheader *header = (struct csiheader *)data.bytes;
+
+    if (name != NULL)
+        *name = @(header->metadata.name);
+    
+    [TKVerifyTool fixCSIData:data key:key];
+    
+    return [[TKClass(CUIThemeRendition) alloc] initWithCSIData:data forKey:key.keyList version:0];
+}
+
+
 
 + (void)correctSliceRects:(struct slice *)sliceRects layout:(CoreThemeLayout)layout count:(NSInteger)count forSize:(struct metric)imageSize {
     if (count < 1)

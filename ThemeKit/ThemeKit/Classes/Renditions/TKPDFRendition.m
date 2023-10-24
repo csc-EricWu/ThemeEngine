@@ -33,9 +33,12 @@ static const void *TKPDFRenditionRawDataChangedContext = &TKPDFRenditionRawDataC
             CGPDFDocumentRelease(*pdf);
         
         pdf = NULL;
-        self.utiType = (__bridge_transfer NSString *)kUTTypePDF;
     }
     return self;
+}
+
+- (NSString *)utiType {
+    return (__bridge NSString *)kUTTypePDF;
 }
 
 - (NSBitmapImageRep *)image {

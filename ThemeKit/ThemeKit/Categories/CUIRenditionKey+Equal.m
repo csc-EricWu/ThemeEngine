@@ -33,7 +33,11 @@
             self.themeDirection           == object.themeDirection &&
             self.themeSize                == object.themeSize &&
             self.themePart                == object.themePart &&
-            self.themeElement             == object.themeElement;
+            self.themeElement             == object.themeElement &&
+            self.themeDeploymentTarget    == object.themeDeploymentTarget &&
+            self.themeAppearance          == object.themeAppearance &&
+            self.themeGlyphSize           == object.themeGlyphSize &&
+            self.themeGlyphWeight         == object.themeGlyphWeight;
 }
 
 @end

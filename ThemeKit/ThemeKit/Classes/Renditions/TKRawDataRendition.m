@@ -9,6 +9,7 @@
 #import "TKRawDataRendition.h"
 #import "TKRendition+Private.h"
 #import <SymRez.h>
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 @import QuartzCore.CATransaction;
 
@@ -69,18 +70,21 @@ NSString *const TKUTITypeCoreAnimationArchive = @"com.apple.coreanimation-archiv
     if (self._previewImage)
         return;
     
-    if ([self.utiType isEqualToString:TKUTITypeCoreAnimationArchive]) {
+    UTType *uti = [UTType typeWithIdentifier:self.utiType];
+    if ([uti conformsToType:UTTypeImage]) {
+        self._previewImage = [[NSImage alloc] initWithData:_rawData];
+    } else if ([self.utiType isEqualToString:TKUTITypeCoreAnimationArchive]) {
         __weak CALayer *layer = self.rootLayer;
         
         self._previewImage = [NSImage imageWithSize:layer.bounds.size
                                             flipped:layer.geometryFlipped
                                      drawingHandler:^BOOL(NSRect dstRect) {
-                                         [CATransaction begin];
-                                         [CATransaction setDisableActions: YES];
-                                         [layer renderInContext:[[NSGraphicsContext currentContext] graphicsPort]];
-                                         [CATransaction commit];
-                                         return YES;
-                                     }];
+            [CATransaction begin];
+            [CATransaction setDisableActions: YES];
+            [layer renderInContext:[[NSGraphicsContext currentContext] graphicsPort]];
+            [CATransaction commit];
+            return YES;
+        }];
     } else if (self.utiType != nil) {
         self._previewImage = [[NSWorkspace sharedWorkspace] iconForFileType:self.utiType];
         
@@ -155,6 +159,24 @@ NSString *const TKUTITypeCoreAnimationArchive = @"com.apple.coreanimation-archiv
 - (void)setUtiType:(NSString *)utiType {
     [super setUtiType:utiType];
     self._previewImage = nil;
+}
+
+- (NSString *)utiType {
+    NSString *utiType = [super utiType];
+    if (utiType) return utiType;
+    
+    if (!self.isAssetPack) {
+        NSString *ext = [self.name pathExtension];
+        if (!ext.length) return nil;
+        
+        UTType *uti = [UTType typeWithFilenameExtension:ext];
+        if (!uti) return nil;
+
+        utiType = uti.identifier;
+        [super setUtiType:utiType];
+    }
+    
+    return utiType;
 }
 
 + (void)load {

@@ -96,6 +96,21 @@
 - (long long)themeElement;
 - (void)setThemeElement:(long long)arg1;
 
+- (long long)themeDeploymentTarget;
+- (void)setThemeDeploymentTarget:(long long)arg1;
+
+- (long long)themeAppearance;
+- (void)setThemeAppearance:(long long)arg1;
+
+- (long long)themeLocalization;
+- (void)setThemeLocalization:(long long)arg1;
+
+-(long long)themeGlyphSize;
+-(void)setThemeGlyphSize:(long long)arg1;
+
+-(long long)themeGlyphWeight;
+-(void)setThemeGlyphWeight:(long long)arg1;
+
 - (const struct renditionkeytoken *)keyList;
 - (void)removeValueForKeyTokenIdentifier:(long long)arg1;
 - (void)copyValuesFromKeyList:(const struct renditionkeytoken *)arg1;

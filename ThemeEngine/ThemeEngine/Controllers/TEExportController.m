@@ -10,6 +10,7 @@
 #import <ThemeKit/TKBitmapRendition.h>
 #import <ThemeKit/TKPDFRendition.h>
 #import <ThemeKit/TKSVGRendition.h>
+#import <ThemeKit/TKRawDataRendition.h>
 
 #import "NSAppleScript+Functions.h"
 #import "NSURL+Paths.h"
@@ -84,7 +85,7 @@
         
     } else if ([rendition isKindOfClass:[TKSVGRendition class]]) {
         NSMutableArray *urls = [NSMutableArray array];
-        for (TKPDFRendition *rend in renditions) {
+        for (TKSVGRendition *rend in renditions) {
             NSURL *url = [tmpURL URLByAppendingPathComponent:[[[NSUUID UUID] UUIDString] stringByAppendingString:@"svg"]];
             //NSData *d2 = [wholeData subdataWithRange:NSMakeRange(17, wholeData.length - 17)];
             NSData *svgData = [rend.rawData subdataWithRange:NSMakeRange(0x11E, rend.rawData.length - 0x11E)];
@@ -97,6 +98,10 @@
                                         options:NSWorkspaceLaunchDefault
                  additionalEventParamDescriptor:nil
                               launchIdentifiers:nil];
+    } else if ([rendition isKindOfClass:[TKRawDataRendition class]]) {
+        NSURL *url = [tmpURL URLByAppendingPathComponent:rendition.name];
+        [((TKRawDataRendition*)rendition).rawData writeToURL:url atomically:NO];
+        [[NSWorkspace sharedWorkspace] openURL:url];
     } else {
         NSLog(@"no rule to export");
     }

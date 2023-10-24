@@ -102,6 +102,7 @@
 
 - (instancetype)initWithCSIData:(NSData *)arg1 forKey:(const struct renditionkeytoken *)arg2 artworkStatus:(long long)arg3;
 - (instancetype)initWithCSIData:(NSData *)arg1 forKey:(const struct renditionkeytoken *)arg2;
+- (instancetype)initWithCSIData:(NSData *)arg1 forKey:(const struct renditionkeytoken *)arg2 version:(long long)version;
 
 - (void)_initializeRenditionKey:(const struct renditionkeytoken *)arg1;
 - (instancetype)_initWithCSIData:(NSData *)arg1 forKey:(const struct renditionkeytoken *)arg2 artworkStatus:(long long)arg3;

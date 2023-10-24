@@ -27,6 +27,7 @@
 
 // Create all other renditions, in order of called
 + (instancetype)renditionWithCSIData:(NSData *)csiData renditionKey:(CUIRenditionKey *)key;
++ (instancetype)renditionWithCSIData:(NSData *)csiData renditionKey:(CUIRenditionKey *)key version:(long long)version;
 + (instancetype)renditionWithCUIRendition:(CUIThemeRendition *)rendition csiData:(NSData *)csiData key:(CUIRenditionKey *)key;
 + (Class)renditionClassForCoreUIRendition:(CUIThemeRendition *)rendition;
 - (instancetype)_initWithCUIRendition:(CUIThemeRendition *)rendition csiData:(NSData *)csiData key:(CUIRenditionKey *)key;

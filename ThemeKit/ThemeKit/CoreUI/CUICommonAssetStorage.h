@@ -70,7 +70,7 @@ struct _carheader {
 
 - (void)enumerateKeysAndObjectsUsingBlock:(void (^)(struct renditionkeytoken *keyList, NSData *csiData))block;
 - (NSArray *)assetKeysMatchingBlock:(id)arg1;
-- (NSArray *)allAssetKeys;
+- (NSArray <CUIRenditionKey *> *)allAssetKeys;
 - (id)assetForKey:(NSData *)key;
 - (BOOL)assetExistsForKeyData:(const void *)bytes length:(unsigned long long)length;
 - (BOOL)assetExistsForKey:(NSData *)key;
@@ -102,6 +102,7 @@ struct _carheader {
 - (unsigned int)schemaVersion;
 - (unsigned int)coreuiVersion;
 - (unsigned int)storageVersion;
+- (unsigned int)distilledInCoreUIVersion;
 
 - (void)_swapRenditionKeyArray:(unsigned short *)renditionKeyArray;
 - (struct renditionkeytoken)_swapRenditionKeyToken:(struct renditionkeytoken)token;

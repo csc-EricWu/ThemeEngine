@@ -136,6 +136,7 @@
     wrapper.pixelFormat = self.pixelFormat;
     wrapper.allowsMultiPassEncoding = NO;
     
+    wrapper.sourceAlphaInfo = 0;
     if (!self.image.isPlanar && self.image.hasAlpha &&
         self.image.bitsPerPixel == 32 && self.image.samplesPerPixel == 4 &&
         wrapper.pixelFormat == CSIPixelFormatARGB &&

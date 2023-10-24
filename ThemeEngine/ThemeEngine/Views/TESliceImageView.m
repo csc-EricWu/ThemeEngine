@@ -17,7 +17,7 @@ static NSEdgeInsets TEIntegralInsets(NSEdgeInsets insets) {
 
 static const CGFloat sliceSpaceWidth = 2.0;
 
-@interface TESliceImageView ()
+@interface TESliceImageView () <CALayerDelegate>
 @property (strong) CALayer *leftHandle;
 @property (strong) CALayer *topHandle;
 @property (strong) CALayer *bottomHandle;

@@ -11,17 +11,13 @@
 
 @implementation TEBackgroundColorView
 
-- (void)drawRect:(NSRect)dirtyRect {
-    [self.backgroundColor set];
-    NSRectFillUsingOperation(dirtyRect, NSCompositingOperationSourceOver);
-}
-
 - (void)viewDidMoveToSuperview {
     self.wantsLayer = YES;
     [super viewDidMoveToSuperview];
 }
 
 - (void)setBackgroundColor:(NSColor *)backgroundColor {
+    self.layer.backgroundColor = backgroundColor.CGColor;
     _backgroundColor = backgroundColor;
     [self setNeedsDisplay:YES];
 }
