@@ -136,7 +136,7 @@
     wrapper.pixelFormat = self.pixelFormat;
     wrapper.allowsMultiPassEncoding = NO;
     
-    wrapper.sourceAlphaInfo = 0;
+
     if (!self.image.isPlanar && self.image.hasAlpha &&
         self.image.bitsPerPixel == 32 && self.image.samplesPerPixel == 4 &&
         wrapper.pixelFormat == CSIPixelFormatARGB &&
@@ -156,8 +156,8 @@
         const uint8_t *map = NULL;
 
         // RGBA to BGRA
-        if ((format & NSAlphaFirstBitmapFormat) != NSAlphaFirstBitmapFormat) {
-            if ((format & NS32BitBigEndianBitmapFormat) == NS32BitBigEndianBitmapFormat) {
+        if ((format & NSBitmapFormatAlphaFirst) != NSBitmapFormatAlphaFirst) {
+            if ((format & NSBitmapFormatThirtyTwoBitBigEndian) == NSBitmapFormatThirtyTwoBitBigEndian) {
                 // ABGR -> BGRA
                 const uint8_t big[4] = { 3, 0, 1, 2 };
                 map = big;
@@ -168,7 +168,7 @@
             }
         } else {
             // ARGB to BGRA
-            if ((format & NS32BitBigEndianBitmapFormat) == NS32BitBigEndianBitmapFormat) {
+            if ((format & NSBitmapFormatThirtyTwoBitBigEndian) == NSBitmapFormatThirtyTwoBitBigEndian) {
                 // BGRA -> BGRA
                 const uint8_t big[4] = { 0, 1, 2, 3 };
                 map = big;
@@ -197,7 +197,7 @@
                                        kvImageNoFlags);
         
         // Unpremultiply that alpha
-        if ((format & NSAlphaNonpremultipliedBitmapFormat) != NSAlphaNonpremultipliedBitmapFormat) {
+        if ((format & NSBitmapFormatAlphaNonpremultiplied) != NSBitmapFormatAlphaNonpremultiplied) {
             src.data = newData;
             vImageUnpremultiplyData_ARGB8888(&src,
                                              &dst,
